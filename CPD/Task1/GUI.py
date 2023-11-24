@@ -172,9 +172,9 @@ class ProcessManagerApp:
             self.ax.legend()
         self.canvas.draw()
         if self.inter:
-            self.frame2.after(int(self.inter)*1000, self.animate)
+            self.frame2.after(int(self.inter)*5000, self.animate)
         else:
-            self.frame2.after(1000, self.animate)
+            self.frame2.after(5000, self.animate)
     def move_page(self):
         if self.status==1:
             self.frame1.pack_forget()
