@@ -38,14 +38,23 @@
 Через каждые n секунд (по умолчанию 1) происходит обновление данных о процессоре, памяти и загрузке из/в сеть. Параллельно строятся графики
 
 ## Листинг:
+```
 from tkinter import *
+
 from tkinter import ttk
+
 import psutil  # Для получения информации о процессах и ресурсах системы
+
 import matplotlib.pyplot as plt
+
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+
 import numpy as np
+
 import matplotlib.animation as animation
+
 from tkinter import messagebox as mb
+
 
 class ProcessManagerApp:
     def __init__(self, root):
@@ -282,4 +291,4 @@ if __name__ == "__main__":
     root = Tk()
     app = ProcessManagerApp(root)
     root.mainloop()
-
+```
