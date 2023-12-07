@@ -1,19 +1,21 @@
-ЗАДАНИЕ:
+# ЗАДАНИЕ:
+
 Task_3_2_server.py Task_3_2_client.py Используя pickle - де/сериализация произвольных объектов.
 
-РЕЗУЛЬТАТ РАБОТЫ:
+# РЕЗУЛЬТАТ РАБОТЫ:
 
 ![image](https://github.com/Triceratops228/Triceratops228-Timur_Gallyamov_20321_HMI_CPD/assets/146287277/529428d7-cda5-4a4d-8c96-578e96e54447)
 
-Пояснение:
+# Пояснение:
 
 Каждую секунду посылает реальное время(день недели, месяц, число, время, год)
 
-Листинг:
+# Листинг:
 
-Серверная часть:
+# Серверная часть:
 
-```import socket
+``` py
+import socket
 import time
 import pickle
 
@@ -54,8 +56,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket:
             #print(k, v)
 ```
 
-Клиентская часть:
-```
+# Клиентская часть:
+
+``` py
 import socket
 import time
 import pickle
