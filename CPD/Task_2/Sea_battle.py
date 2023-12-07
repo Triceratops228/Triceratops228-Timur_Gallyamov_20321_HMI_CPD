@@ -93,17 +93,37 @@ class GamePole():
         print(" ")
         for i in bot_sea:
             print(*i)
+    def get_pole(self):
+        hums = [[0 for x in range(self._size)] for y in range(self._size)]
+        for i in range(len(_coord)):
+            if _coord[i][3]==1:
+                for x in range(_coord[i][2]):
+                    hums[_coord[i][1]][_coord[i][0]+x] = _cell_hum[i][0][x]
+            else:
+                for x in range(_coord[i][2]):
+                    hums[_coord[i][1]+x][_coord[i][0]] = _cell_hum[i][0][x]
+        thums=[]
+        for i in hums:
+            thums.append(tuple(i))
+        return tuple(thums)
 
 
 class Ship:
     def __init__(self,length=int,tp=1,x=None,y=None) -> None:
         self._length=length
+        self._x=x
+        self._y=y
         self._tp=tp
         self._cell_hum=_cell_hum
         self._is_move=True
+        self._cells = [1 for i in range(length)]
         self._coord=_coord
         self._bot_coord=_bot_coord
         #self._sea=[[0 for i in range(10)] for ii in range(10)]
+    def __getitem__(self,item):
+        return self._cells[item]
+    def __setitem__(self,key,value):
+        self._cells[key] = value
     def coror(self):
         if self._tp==1:
             _s=[(x,y) for x in range(self._x,self._x+self._length) for y in range(self._y, self._y+1)]
@@ -151,18 +171,21 @@ class Ship:
     def is_collide(self,ship):
         if ship._tp==1:
             _s2=[(x,y) for x in range(ship._x-1,ship._x+ship._length+1) for y in range(ship._y-1, ship._y+2)]
+            _s4 = [(x,y) for x in range(ship._x,ship._x+ship._length) for y in range(ship._y, ship._y+1)]
         elif ship._tp==2:
             _s2=[(x, y) for x in range(ship._x-1,ship._x+2) for y in range(ship._y-1, ship._y + ship._length+1)]
-
+            _s4 = [(x, y) for x in range(ship._x,ship._x+1) for y in range(ship._y, ship._y + ship._length)]
         if self._tp==1:
             _s1=[(x, y) for x in range(self._x-1,self._x+self._length+1) for y in range(self._y-1, self._y+2)]
+            _s3 = [(x, y) for x in range(self._x,self._x+self._length) for y in range(self._y, self._y+1)]
         elif self._tp==2:
             _s1=[(x, y) for x in range(self._x-1,self._x+2) for y in range(self._y-1, self._y+self._length+1)]
-
-        if set(_s1).intersection(set(_s2)):
+            _s3 = [(x, y) for x in range(self._x,self._x+1) for y in range(self._y, self._y+self._length)]
+        if set(_s1).intersection(set(_s4)) or set(_s2).intersection(set(_s3)):
             return True
         else:
             return False
+        
     def is_out_pole(self,size):
         if self._tp==1:
             if self._x+self._length>size or self._x>size:
@@ -208,7 +231,7 @@ _cell_bot=[]
 _coord=[]
 _bot_coord=[]
 _cell=[]
-p=GamePole(15)
+""" p=GamePole(15)
 p.__init__
 
 sh1=Ship(1,1,1,1)
@@ -231,15 +254,55 @@ sh7.set_start_coords(7,3)
 sh8.set_start_coords(10,10)
 sh9.set_start_coords(12,12)
 sh10.set_start_coords(5,10)
-Myships=[sh1,sh2,sh3,sh4,sh5,sh6,sh7,sh8,sh9,sh10]
+Myships=[sh1,sh2,sh3,sh4,sh5,sh6,sh7,sh8,sh9,sh10] """
 #sh3.is_collide(sh2)
 #sh1.is_out_pole(10)
 #print(_coord)
 #print(_cell_bot)
 #print(_cell_hum)
-p.show()
+#p.show()
 #p.get_ships()
-gg=False
+# Tests
+ship = Ship(2)
+ship = Ship(2, 1)
+ship = Ship(3, 2, 0, 0)
+assert ship._length == 3 and ship._tp == 2 and ship._x == 0 and ship._y == 0, "неверные значения атрибутов объекта класса Ship"
+assert ship._cells == [1, 1, 1], "неверный список _cells"
+assert ship._is_move, "неверное значение атрибута _is_move"
+ship.set_start_coords(1, 2)
+assert ship._x == 1 and ship._y == 2, "неверно отработал метод set_start_coords()"
+assert ship.get_start_coords() == (1, 2), "неверно отработал метод get_start_coords()"
+ship.move(1)
+s1 = Ship(4, 1, 0, 0)
+s2 = Ship(3, 2, 0, 0)
+s3 = Ship(3, 2, 0, 2)
+assert s1.is_collide(s2), "неверно работает метод is_collide() для кораблей Ship(4, 1, 0, 0) и Ship(3, 2, 0, 0)"
+assert s1.is_collide(s3) == False, "неверно работает метод is_collide() для кораблей Ship(4, 1, 0, 0) и Ship(3, 2, 0, 2)"
+s2 = Ship(3, 2, 1, 1)
+assert s1.is_collide(s2), "неверно работает метод is_collide() для кораблей Ship(4, 1, 0, 0) и Ship(3, 2, 1, 1)"
+s2 = Ship(3, 1, 8, 1)
+assert s2.is_out_pole(10), "неверно работает метод is_out_pole() для корабля Ship(3, 1, 8, 1)"
+s2 = Ship(3, 2, 1, 5)
+assert s2.is_out_pole(10) == False, "неверно работает метод is_out_pole(10) для корабля Ship(3, 2, 1, 5)"
+s2[0] = 2
+assert s2[0] == 2, "неверно работает обращение ship[indx]"
+p = GamePole(10)
+p.__init__()
+for nn in range(5):
+    for s in p._ships:
+        assert s.is_out_pole(10) == False, "корабли выходят за пределы игрового поля"
+        for ship in p.get_ships():
+            if s != ship:
+                assert s.is_collide(ship) == False, "корабли на игровом поле соприкасаются"
+    p.move_ships()
+
+gp = p.get_pole()
+assert type(gp) == tuple and type(gp[0]) == tuple, "метод get_pole должен возвращать двумерный кортеж"
+assert len(gp) == 10 and len(gp[0]) == 10, "неверные размеры игрового поля, которое вернул метод get_pole"
+pole_size_8 = GamePole(8)
+pole_size_8.__init__()
+print("\n Passed")
+""" gg=False
 while not(gg):
     Su=0
     Su2=0
@@ -253,6 +316,6 @@ while not(gg):
     else:
         SeaBattle(int(input()),int(input()),p,Myships)
         p.show()
-        p.move_ships()
+        p.move_ships() """
 #p.move_ships()
 #p.show()
