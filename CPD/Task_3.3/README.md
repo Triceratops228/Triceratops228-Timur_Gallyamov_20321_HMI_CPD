@@ -4,7 +4,7 @@
 
 # РЕЗУЛЬТАТ РАБОТЫ:
 
-image.png
+![image](https://github.com/Triceratops228/Triceratops228-Timur_Gallyamov_20321_HMI_CPD/assets/146287277/df0b1c66-c725-4799-a83d-0d3bc03f7eb2)
 
 # ПОЯСНЕНИЕ:
 
