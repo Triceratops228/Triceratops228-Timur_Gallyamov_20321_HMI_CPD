@@ -175,18 +175,18 @@ class ProcessManagerApp:
         # в следующий раз выполняем сортировку в обратном порядке
         self.process_tree.heading(col, command=self.sort(col)) """
     def ani_memory(self):
-        self.update_process_list()
+        self.update()
         self.Time_mem+=1
         self.t = np.arange(0,self.Time_mem)
         self.data_memory.append(self.memory_percent)
         self.ax.plot(self.t, self.data_memory,color='red',label='Memory')
-        self.ax.set_ylim(0,50)
-        self.ax.set_yticks(np.arange(0,50,step=5))
+        self.ax.set_ylim(0,100)
+        self.ax.set_yticks(np.arange(0,100,step=5))
         self.ax.grid(visible=True)
         self.ax.legend()
         self.canvas.draw()
     def ani_cpu(self):
-        self.update_process_list()
+        self.update()
         self.Time_cp+=1
         self.t = np.arange(0,self.Time_cp)
         self.cpu.append(self.cpu_percent)
@@ -197,7 +197,7 @@ class ProcessManagerApp:
         self.ax.legend()
         self.canvas.draw()
     def ani_ssd(self):
-        self.update_process_list()
+        self.update()
         self.Time_ssd+=1
         self.t = np.arange(0,self.Time_ssd)
         self.ssd.append(self.memory_info)
@@ -208,7 +208,7 @@ class ProcessManagerApp:
         self.ax.legend()
         self.canvas.draw()
     def ani_int(self):
-        self.update_process_list()
+        self.update()
         self.time_int+=1
         self.t = np.arange(0,self.time_int)
         self.netio = psutil.net_io_counters(pernic=True)
@@ -248,6 +248,12 @@ class ProcessManagerApp:
             self.frame1.pack(fill=BOTH,expand=1)
             self.status = 1
             self.update_process_list()
+    def update(self):
+        processes = psutil.process_iter(attrs=['pid', 'name', 'cpu_percent', 'memory_percent','memory_info'])
+        for process in processes:
+            self.cpu_percent=psutil.cpu_percent()
+            self.memory_percent=psutil.virtual_memory().percent
+            self.memory_info=psutil.disk_usage('/')[3]
     def update_process_list(self):
         self.id=[]
         for i in self.process_tree.get_children():
@@ -307,5 +313,6 @@ if __name__ == "__main__":
     root = Tk()
     app = ProcessManagerApp(root)
     root.mainloop()
+
 
 ```
