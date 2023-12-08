@@ -95,175 +95,27 @@ get_pole() - получение текущего игрового поля в в
 # ЛИСТИНГ:
 ```py
 import random
-import time
-class GamePole():
-    def __init__(self,size=10) -> None:
-        self._size=size
-        self._ships=[Ship(1,random.randint(1,2)),Ship(1,random.randint(1,2)),Ship(1,random.randint(1,2)),Ship(1,random.randint(1,2)),Ship(2,random.randint(1,2)),Ship(2,random.randint(1,2)),Ship(2,random.randint(1,2)),Ship(3,random.randint(1,2)),Ship(3,random.randint(1,2)),Ship(4,random.randint(1,2))]
-        self.start_time = time.time()
-        self._cell_bot=_cell_bot
-        self._cell_hum=_cell_hum
-        self.bot_game()
-    def coror2(self,ship):
-        if ship._tp==1:
-            _s=[(x,y) for x in range(ship._x,ship._x+ship._length) for y in range(ship._y, ship._y+1)]
-            
-            return _s
-        else:
-            _s=[(x, y) for x in range(ship._x,ship._x+1) for y in range(ship._y, ship._y + ship._length)]
-            
-            return _s
-    def bot_game(self):
-        possible_coord=[(x,y) for x in range(self._size) for y in range(self._size)]
-        for i in range(10):
-            flag=True
-            while flag == True:
-                elapsed_time = time.time() - self.start_time
-                if possible_coord == []:
-                    break
-                x, y = random.choice(possible_coord)
-                self._ships[i].set_start_bot(x,y)
-                if i==0:
-                    break
-                for j in range(0,i):
-                    if self._ships[i].is_collide(self._ships[j]) == True or self._ships[i].is_out_pole(self._size) == True:
-                        #print(len(possible_coord))
-                        #possible_coord.remove((x,y))
-                        flag = True
-                        del(_bot_coord[-1])
-                        break
-                    else:
-                        if j==i-1:
-                            possible_coord.remove((x,y))
-                        flag = False
-            self._cell_bot.append([[1 for j in range(self._ships[i]._length)],self.coror2(self._ships[i])])
-    def get_ships(self):
-        return self._ships
-    def checkin(self,i):
-        for j in self._ships:
-            if i!=j and (i.is_collide(j) or i.is_out_pole(self._size)):
-                return True
-    def move_ships(self):
-        for i in self._ships:
-            i.move_bot(1)
-            if self.checkin(i):
-                i.move_bot(-2)
-                if self.checkin(i):
-                    i.move_bot(1)
-                    #print("Нельзя")
-            #print("ОК")
-    def show(self):
-        bot_sea=[[0 for i in range(self._size)] for ii in range(self._size)]
-        h_sea=[[0 for i in range(self._size)] for ii in range(self._size)]
-        zalupa=False
-        print(" ")
-        for i in range(len(_coord)):
-            if _coord[i][3]==1:
-                for x in range(_coord[i][2]):
-                    h_sea[_coord[i][1]][_coord[i][0]+x] = _cell_hum[i][0][x]
-            else:
-                for x in range(_coord[i][2]):
-                    h_sea[_coord[i][1]+x][_coord[i][0]] = _cell_hum[i][0][x]
-
-                """ if elapsed_time>10:
-                    self.start_time = time.time()
-                    zalupa = True
-                if zalupa:
-                    break
-            if zalupa:
-                break
-            if possible_coord == []:
-                    break """
-            #print(possible_coord)
-        for i in range(len(_bot_coord)):
-            if _bot_coord[i][3]==1:
-                for x in range(_bot_coord[i][2]):
-                    bot_sea[_bot_coord[i][1]][_bot_coord[i][0]+x] = _cell_bot[i][0][x]
-                    #print(_cell_bot[i][0])
-            else:
-                for x in range(_bot_coord[i][2]):
-                    bot_sea[_bot_coord[i][1]+x][_bot_coord[i][0]] = _cell_bot[i][0][x]
-                    #print(_cell_bot[i][0])
-        for i in h_sea:
-            print(*i)
-        print(" ")
-        for i in bot_sea:
-            print(*i)
-    def get_pole(self):
-        hums = [[0 for x in range(self._size)] for y in range(self._size)]
-        for i in range(len(_coord)):
-            if _coord[i][3]==1:
-                for x in range(_coord[i][2]):
-                    hums[_coord[i][1]][_coord[i][0]+x] = _cell_hum[i][0][x]
-            else:
-                for x in range(_coord[i][2]):
-                    hums[_coord[i][1]+x][_coord[i][0]] = _cell_hum[i][0][x]
-        thums=[]
-        for i in hums:
-            thums.append(tuple(i))
-        return tuple(thums)
-
-
 class Ship:
-    def __init__(self,length=int,tp=1,x=None,y=None) -> None:
+    def __init__(self,length=int,tp=1,x=None,y=None):
+        self._x=x
+        self._y=y
         self._length=length
-        self._x=x
-        self._y=y
         self._tp=tp
-        self._cell_hum=_cell_hum
         self._is_move=True
-        self._cells = [1 for i in range(length)]
-        self._coord=_coord
-        self._bot_coord=_bot_coord
-        #self._sea=[[0 for i in range(10)] for ii in range(10)]
-    def __getitem__(self,item):
-        return self._cells[item]
-    def __setitem__(self,key,value):
-        self._cells[key] = value
-    def coror(self):
-        if self._tp==1:
-            _s=[(x,y) for x in range(self._x,self._x+self._length) for y in range(self._y, self._y+1)]
-            
-            return _s
-        else:
-            _s=[(x, y) for x in range(self._x,self._x+1) for y in range(self._y, self._y + self._length)]
-            
-            return _s
+        self._cells=[1 for _ in range(length)]
+
     def set_start_coords(self,x,y):
-        if (x<=0 or y<=0):
-            print("Начинай с 1")
-            return
         self._x=x
         self._y=y
-        self._coord.append((self._x,self._y,self._length,self._tp))
-        self._cell_hum.append([[1 for i in range(self._length)],self.coror()])
-        
-    def set_start_bot(self,x,y):
-        self._x=x
-        self._y=y
-        self._bot_coord.append((self._x,self._y,self._length,self._tp))
-        
     def get_start_coords(self):
         return (self._x,self._y)
-    def move_bot(self,go):
-        if self._is_move==False:
-            return
-        if self._tp==1:
-            self._bot_coord[self._bot_coord.index((self._x,self._y,self._length,self._tp))] = (self._x+go,self._y,self._length,self._tp)
-            self._x+=go
-        else:
-            self._bot_coord[self._bot_coord.index((self._x,self._y,self._length,self._tp))] = (self._x,self._y+go,self._length,self._tp)
-            self._y+=go
     def move(self,go):
-        if self._is_move==False:
+        if self._is_move == False:
             return
-        if self._tp==1:
-            self._coord[self._coord.index((self._x,self._y,self._length,self._tp))] = (self._x+go,self._y,self._length,self._tp)
-            self._x+=go
+        if self._tp == 1:
+            self._x += go
         else:
-            self._coord[self._coord.index((self._x,self._y,self._length,self._tp))] = (self._x,self._y+go,self._length,self._tp)
-            self._y+=go
-        
+            self._y +=go
     def is_collide(self,ship):
         if ship._tp==1:
             _s2=[(x,y) for x in range(ship._x-1,ship._x+ship._length+1) for y in range(ship._y-1, ship._y+2)]
@@ -281,7 +133,6 @@ class Ship:
             return True
         else:
             return False
-        
     def is_out_pole(self,size):
         if self._tp==1:
             if self._x+self._length>size or self._x>size:
@@ -293,43 +144,99 @@ class Ship:
                 return True
             else:
                 return False
-class SeaBattle(GamePole):
-    def __init__(self,x,y,shiper,shii) -> None:
-        self.shoot = (x,y)
-        self._ships=shiper._ships
-        self._shii = shii
-        self.checksh()
-        self.killsh()
-        
-    def checksh(self):
-        for i in _cell_bot:
-            for j in i[1]:
-                if j==self.shoot:
-                    i[0][i[1].index(j)] = -1
-                    print("Попал")
-                    self._ships[_cell_bot.index(i)]._is_move = False
-                    return
-    def killsh(self):
-        #print(_cell_hum)
-        for i in _cell_hum:
-            #print(i[1])
-            for j in i[1]:
-                if i[0][i[1].index(j)]!=-1:
-                    i[0][i[1].index(j)] = -1
-                    print("Попал")
-                    #print(self._shii[_cell_hum.index(i)])
-                    self._shii[_cell_hum.index(i)]._is_move = False
-                    return
-            
-
-_cell_hum=[]
-_cell_bot=[]
-_coord=[]
-_bot_coord=[]
-_cell=[]
-""" p=GamePole(15)
-p.__init__
-
+    def __getitem__(self,item):
+        return self._cells[item]
+    def __setitem__(self,key,value):
+        self._cells[key] = value
+class GamePole:
+    def __init__(self,size=10) -> None:
+        self._size = size
+        self._ships = []
+    def init(self):
+        flag = True
+        while flag:
+            self._ships = [Ship(1,random.randint(1,2)),Ship(1,random.randint(1,2)),Ship(1,random.randint(1,2)),Ship(1,random.randint(1,2)),
+                        Ship(2,random.randint(1,2)),Ship(2,random.randint(1,2)),Ship(2,random.randint(1,2)),
+                        Ship(3,random.randint(1,2)),Ship(3,random.randint(1,2)),
+                        Ship(4,random.randint(1,2))]
+            for i in range(10):
+                self._ships[i].set_start_coords(random.randint(0,self._size-1),random.randint(0,self._size-1))
+            flag = False
+            for i in self._ships:
+                for j in self._ships:
+                    if i!=j and (i.is_collide(j) or i.is_out_pole(self._size)):
+                        flag = True
+                        break
+    def get_ships(self):
+        return self._ships
+    def move_ships(self):
+        for i in range(10):
+            if self._ships[i]._is_move == True:
+                self._ships[i].move(1)
+                for j in range(10):
+                    if i!=j and (self._ships[i].is_collide(self._ships[j]) or self._ships[i].is_out_pole(self._size)):
+                        self._ships[i].move(-2)
+                        for k in range(10):
+                            if i!=k and (self._ships[i].is_collide(self._ships[k]) or self._ships[i].is_out_pole(self._size)):
+                                self._ships[i].move(1)
+    def show(self):
+        h_sea = [[0 for _ in range(self._size)] for _ in range(self._size)]
+        b_sea = [[0 for _ in range(self._size)] for _ in range(self._size)]
+        for i in self._ships:
+            if i._tp == 1:
+                b_sea[i._y][i._x:i._x+i._length] = i._cells
+            else:
+                for j in range(i._length):
+                    b_sea[i._y+j][i._x] = i._cells[j]
+        for i in b_sea:
+            print(*i)
+    def get_pole(self):
+        pole = [[0 for _ in range(self._size)] for _ in range(self._size)]
+        for i in self._ships:
+            if i._tp == 1:
+                pole[i._y][i._x:i._x+i._length] = i._cells
+            else:
+                for j in range(i._length):
+                    pole[i._y+j][i._x] = i._cells[j]
+        field = []
+        for i in pole:
+            field.append(tuple(i))
+        return tuple(field)
+class SeaBattle:
+    def __init__(self,x,y,ships,shii) -> None:
+        self.shot = (x,y)
+        self._size = ships._size
+        self._ships = ships._ships
+        self._human_ships = shii
+        self.coord=[]
+        self.coord2=[]
+        self.checkin()
+        self.chekif()
+    def checkin(self):
+        for i in self._ships:
+            if i._tp==1:
+                self.coord.append([(x,y) for x in range(i._x,i._x+i._length) for y in range(i._y,i._y+1)])
+            else:
+                self.coord.append([(x,y) for x in range(i._x,i._x+1) for y in range(i._y,i._y+i._length)])
+        for i in self.coord:
+            if self.shot in i:
+                korabl = self.coord.index(i)
+                place = i.index(self.shot)
+                self._ships[korabl]._cells[place] = 2
+                self._ships[korabl]._is_move = False
+    def chekif(self):
+        self.bshot = (random.randint(0,self._size),random.randint(0,self._size))
+        for i in self._human_ships:
+            if i._tp==1:
+                self.coord2.append([(x,y) for x in range(i._x,i._x+i._length) for y in range(i._y,i._y+1)])
+            else:
+                self.coord2.append([(x,y) for x in range(i._x,i._x+1) for y in range(i._y,i._y+i._length)])
+        for i in self.coord2:
+            if self.bshot in i:
+                korabl2 = self.coord2.index(i)
+                place2 = i.index(self.bshot)
+                self._human_ships[korabl2]._cells[place2] = 2
+                self._human_ships[korabl2]._is_move = False
 sh1=Ship(1,1,1,1)
 sh2=Ship(1,1,1,4)
 sh3=Ship(1,2,1,7)
@@ -350,70 +257,23 @@ sh7.set_start_coords(7,3)
 sh8.set_start_coords(10,10)
 sh9.set_start_coords(12,12)
 sh10.set_start_coords(5,10)
-Myships=[sh1,sh2,sh3,sh4,sh5,sh6,sh7,sh8,sh9,sh10] """
-#sh3.is_collide(sh2)
-#sh1.is_out_pole(10)
-#print(_coord)
-#print(_cell_bot)
-#print(_cell_hum)
-#p.show()
-#p.get_ships()
-# Tests
-ship = Ship(2)
-ship = Ship(2, 1)
-ship = Ship(3, 2, 0, 0)
-assert ship._length == 3 and ship._tp == 2 and ship._x == 0 and ship._y == 0, "неверные значения атрибутов объекта класса Ship"
-assert ship._cells == [1, 1, 1], "неверный список _cells"
-assert ship._is_move, "неверное значение атрибута _is_move"
-ship.set_start_coords(1, 2)
-assert ship._x == 1 and ship._y == 2, "неверно отработал метод set_start_coords()"
-assert ship.get_start_coords() == (1, 2), "неверно отработал метод get_start_coords()"
-ship.move(1)
-s1 = Ship(4, 1, 0, 0)
-s2 = Ship(3, 2, 0, 0)
-s3 = Ship(3, 2, 0, 2)
-assert s1.is_collide(s2), "неверно работает метод is_collide() для кораблей Ship(4, 1, 0, 0) и Ship(3, 2, 0, 0)"
-assert s1.is_collide(s3) == False, "неверно работает метод is_collide() для кораблей Ship(4, 1, 0, 0) и Ship(3, 2, 0, 2)"
-s2 = Ship(3, 2, 1, 1)
-assert s1.is_collide(s2), "неверно работает метод is_collide() для кораблей Ship(4, 1, 0, 0) и Ship(3, 2, 1, 1)"
-s2 = Ship(3, 1, 8, 1)
-assert s2.is_out_pole(10), "неверно работает метод is_out_pole() для корабля Ship(3, 1, 8, 1)"
-s2 = Ship(3, 2, 1, 5)
-assert s2.is_out_pole(10) == False, "неверно работает метод is_out_pole(10) для корабля Ship(3, 2, 1, 5)"
-s2[0] = 2
-assert s2[0] == 2, "неверно работает обращение ship[indx]"
-p = GamePole(10)
-p.__init__()
-for nn in range(5):
-    for s in p._ships:
-        assert s.is_out_pole(10) == False, "корабли выходят за пределы игрового поля"
-        for ship in p.get_ships():
-            if s != ship:
-                assert s.is_collide(ship) == False, "корабли на игровом поле соприкасаются"
-    p.move_ships()
-
-gp = p.get_pole()
-assert type(gp) == tuple and type(gp[0]) == tuple, "метод get_pole должен возвращать двумерный кортеж"
-assert len(gp) == 10 and len(gp[0]) == 10, "неверные размеры игрового поля, которое вернул метод get_pole"
-pole_size_8 = GamePole(8)
-pole_size_8.__init__()
-print("\n Passed")
-""" gg=False
+Myships=[sh1,sh2,sh3,sh4,sh5,sh6,sh7,sh8,sh9,sh10]
+p=GamePole(10)
+p.init()
+gg=False
 while not(gg):
     Su=0
     Su2=0
-    for i in _cell_hum:
-        Su+=sum(i[0])
-    for i in _cell_bot:
-        Su2+=sum(i[0])
+    for i in p._ships:
+        Su+=sum(i._cells)
+    for i in Myships:
+        Su2+=sum(i._cells)
     if (Su or Su2) == -20:
         gg=True
     
     else:
         SeaBattle(int(input()),int(input()),p,Myships)
         p.show()
-        p.move_ships() """
-#p.move_ships()
-#p.show()
+        p.move_ships() 
 
 ```
