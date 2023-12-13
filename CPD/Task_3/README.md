@@ -1,8 +1,11 @@
 # ЗАДАНИЕ:
 
 TCP Client-streaming (Клиент, например, раз в 1 секунду отправляет данные на сервер), используя встроенный в Python модуль socket.
+
 Task_3_1_server.py Task_3_1_client.py Используя encode() и decode()
+
 Task_3_2_server.py Task_3_2_client.py Используя pickle - де/сериализация произвольных объектов.
+
 Task_3_3_server.py Task_3_3_client.py Используя Google Protocol Buffers - де/сериализация определенных структурированных данных, а не произвольных объектов Python
 
 
