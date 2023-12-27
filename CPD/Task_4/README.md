@@ -24,6 +24,7 @@ import video_pb2
 class VideoServer():
     def __init__(self):
         self.server = QTcpServer()
+        self.server.listen(address=QHostAddress.Any,port=5252)
         self.message = video_pb2.Video()
         self.server.newConnection.connect(self.connect)
         self.mainWin = QMainWindow()
